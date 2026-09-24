@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1790251728856,
+      "tag": "0000_typical_arachne",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1790258279767,
+      "tag": "0001_polite_hydra",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1790258713245,
+      "tag": "0002_watery_black_bolt",
+      "breakpoints": true
+    }
+  ]
+}
