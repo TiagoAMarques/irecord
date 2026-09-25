@@ -1,0 +1,1 @@
+ALTER TABLE `sightings` ADD `guesstimated_distance` real DEFAULT 0 NOT NULL;

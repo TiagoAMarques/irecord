@@ -14,11 +14,13 @@ export async function POST(req: Request) {
     const nOptim = numberValue("nOptim");
     if (!nMin || nMin > nOptim || nOptim > nMax) return Response.json({ error: "Group sizes must follow N min ≤ N optim ≤ N max." }, { status: 400 });
     const observerId = numberValue("observerId");
+    const guesstimatedDistance = numberValue("guesstimatedDistance");
     const beaufortSeaState = numberValue("beaufortSeaState");
     const visibilityScale = numberValue("visibilityScale");
     const douglasSeaState = numberValue("douglasSeaState");
     const surveyCode = String(form.get("surveyCode") || "").trim();
     if (!surveyCode) return Response.json({ error: "Survey code is required." }, { status: 400 });
+    if (!Number.isFinite(guesstimatedDistance) || guesstimatedDistance < 0) return Response.json({ error: "Guesstimated distance must be zero or greater." }, { status: 400 });
     if (beaufortSeaState < 1 || beaufortSeaState > 4 || visibilityScale < 0 || visibilityScale > 4 || douglasSeaState < 0 || douglasSeaState > 9) return Response.json({ error: "One or more environmental values are outside the permitted scale." }, { status: 400 });
     const selectedObserver = await env.DB?.prepare("SELECT id FROM observers WHERE id = ? AND active = 1").bind(observerId).first();
     if (!selectedObserver) return Response.json({ error: "Please select an active observer." }, { status: 400 });
@@ -32,7 +34,7 @@ export async function POST(req: Request) {
       }
     }
     const [row] = await getDb().insert(sightings).values({
-      observerId, enteredByObserverId: auth.user!.id, speciesId: numberValue("speciesId"), distanceType: String(form.get("distanceType")), angle: numberValue("angle"),
+      observerId, enteredByObserverId: auth.user!.id, speciesId: numberValue("speciesId"), distanceType: String(form.get("distanceType")), guesstimatedDistance, angle: numberValue("angle"),
       nMin, nMax, nOptim, response: String(form.get("response")), latitude: numberValue("latitude"), longitude: numberValue("longitude"), gpsAccuracy: numberValue("gpsAccuracy"),
       hasPhotos: form.get("hasPhotos") === "yes" || photoKeys.length > 0, photoKeys: JSON.stringify(photoKeys), platform: String(form.get("platform")).trim(), surveyCode, beaufortSeaState, visibilityScale, douglasSeaState,
       observedAt: String(form.get("observedAt")), comments: String(form.get("comments") || "").trim(),
