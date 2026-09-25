@@ -1,0 +1,1 @@
+ALTER TABLE `sightings` ADD `reticule` real DEFAULT 0 NOT NULL;
